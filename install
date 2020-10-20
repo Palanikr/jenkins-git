@@ -1,0 +1,26 @@
+- hosts: web
+  remote_user: ec2-user
+  become: yes
+  tasks:
+       - name: update yum package
+         yum:
+            name: '*'
+            state: latest
+         
+       - name: install java
+         yum:
+            name: java-1.8.0-openjdk
+            state: present
+
+       - name: download package
+         get_url:
+          url: https://downloads.apache.org/tomcat/tomcat-9/v9.0.37/bin/apache-tomcat-9.0.37.zip
+          dest: /usr/local
+          mode: '0777'
+
+       - name: unzip url
+         unarchive:
+             src: /usr/local/apache-tomcat-9.0.37.zip
+             dest: /usr/local
+             remote_src: yes 
+             mode: '0777'
